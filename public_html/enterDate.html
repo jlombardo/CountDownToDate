@@ -1,0 +1,37 @@
+<!--
+    A demo page showing the use of the countDownToDate.js
+
+    @author  Jim Lombard, jlombardo@wctc.edu
+    @version 1.00
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Count Down to Date Demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="js/countDownToDate2.js"></script>
+    </head>
+    <body>
+        <!-- Could be any HTML element -->
+        <p>Time to go: <span id="timeToGo">Preparing...</span></p>
+
+        <!-- Could be any element.
+             The startTime can come from client or server (e.g. using an EL)
+             but MUST be represented as the number of SECONDS to the 
+             target date/time. We use seconds instead of milliseconds because
+             of varying relative 'since' dates for milliseconds. So do the
+             conversion to seconds and place the value here or in any
+             HTML element.
+        -->
+        <div id="startSeconds" style="visibility:hidden;">
+            626400
+        </div>
+
+        <!-- Put this script at bottom so it starts after all the HTML is loaded -->
+        <script type="text/javascript">
+            timeToGoElement = document.getElementById('timeToGo');
+            startValue = document.getElementById('startSeconds').innerHTML;
+            startCountDown();
+        </script>
+    </body>
+</html>
