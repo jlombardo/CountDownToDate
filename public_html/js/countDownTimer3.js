@@ -20,17 +20,17 @@
  */
 
 // create the root namespace and making sure we're not overwriting it
-var net = net || {};
+var BYTESHOP = BYTESHOP || {};
 
 // create a general purpose namespace method
 // this will allow us to create namespace a bit easier
-net.createNS = function(namespace) {
+BYTESHOP.createNS = function(namespace) {
     var nsparts = namespace.split(".");
-    var parent = net;
+    var parent = BYTESHOP;
 
     // we want to be able to include or exclude the root namespace 
     // So we strip it if it's in the namespace
-    if (nsparts[0] === "net") {
+    if (nsparts[0] === "BYTESHOP") {
         nsparts = nsparts.slice(1);
     }
 
@@ -52,7 +52,7 @@ net.createNS = function(namespace) {
     return parent;
 };
 
-net.createNS('net.byteshop.util.time');
+BYTESHOP.createNS('BYTESHOP.util.time');
 
 /**
  * CountDownTimer is a class that provides a dynamic count down display
@@ -77,7 +77,7 @@ net.createNS('net.byteshop.util.time');
  *	@example
  * 	An example of the SHORT display format is: 02:03:40:23
  */
-net.byteshop.util.time.CountDownTimer = function() {
+BYTESHOP.util.time.CountDownTimer = function() {
     var timeToGo = "";
     var startValue = "";
     var countDownTimer = "";
@@ -86,12 +86,13 @@ net.byteshop.util.time.CountDownTimer = function() {
     /**
      * Starts the count down timer. The timer will automatically be
      * stopped when the count down gets to zero.
-     * @param {Number} [startTime] the start time in seconds
+     * @param {Date} [endDate] the end date for the counter
      * @param {Object} [timeToGoElement] the HTML element where the display 
      * text is set to the innerHTML of this element
      */
-    var start = function(startTime, timeToGoElement, displayFormat) {
-        startValue = startTime;
+    var start = function(endDate, timeToGoElement, displayFormat) {
+        var today = new Date();
+        startValue = Math.ceil((endDate - today)/1000)
         timeToGo = timeToGoElement;
         format = displayFormat;
         countDownTimer = window.setInterval(countDown, 1000);

@@ -3,6 +3,7 @@
   <head>
   	<meta charset="utf-8">
     <title>JavaScript Timer Demo</title>
+    <script type="text/javascript" src="js/date.js"></script>
     <script type="text/javascript" src="js/countDownTimer3.js"></script>
 </head>
 
@@ -20,8 +21,11 @@
             e2 = document.getElementById('timeToGo');
             startValue = parseInt(e1.innerHTML);
  
-            var counter = new net.byteshop.util.time.CountDownTimer();
-            counter.start(startValue,e2,"MEDIUM");
+            var counter = new BYTESHOP.util.time.CountDownTimer();
+            var endDate = new Date("June 1, 2013 11:13:00");
+            var today = new Date();
+            counter.start(endDate,e2,"MEDIUM");
+            //alert(Math.floor(endDate.getTime() - today.getTime() / 1000));
 	</script>
 </body>
 
