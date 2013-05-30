@@ -1,1 +1,1 @@
-A simple JavaScript function and dmeo page to count down to a target date/time in varying output formats.
+A simple JavaScript function and dmeo page to count down to a target date/time with varying input and output formats.
