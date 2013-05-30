@@ -1,37 +1,49 @@
-<!--
-    A demo page showing the use of the countDownToDate.js
-
-    @author  Jim Lombard, jlombardo@wctc.edu
-    @version 1.00
--->
 <!DOCTYPE html>
+<!--
+    This is a demo of the ByteShopJs.util.datatime.CountDownTimer that
+    provides a real time, animated count down display to an end date.
+    In the current version no graphics are used.
+
+    Version 1.00
+    Author: James G. Lombardo
+-->
 <html>
-    <head>
-        <title>Count Down to Date Demo</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script type="text/javascript" src="js/countDownToDate.js"></script>
-    </head>
-    <body>
-        <!-- Could be any HTML element -->
-        <p>Time to go: <span id="timeToGo">Preparing...</span></p>
+  <head>
+    <meta charset="utf-8">
+    <title>JavaScript Count Down Timer Demo</title>
+    <script type="text/javascript" src="js/countDownTimer.js"></script>
+</head>
 
-        <!-- Could be any element.
-             The startTime can come from client or server (e.g. using an EL)
-             but MUST be represented as the number of SECONDS to the 
-             target date/time. We use seconds instead of milliseconds because
-             of varying relative 'since' dates for milliseconds. So do the
-             conversion to seconds and place the value here or in any
-             HTML element.
-        -->
-        <div id="startSeconds" style="visibility:hidden;">
-            172800
-        </div>
+<body>
+	
+    <!--
+        The display element must be identified with the id 'timeToGo'
+        to allow the JS function to place the formatted count down data
+    -->
+    <p>Time to go: <span id="timeToGo">xx</span></p>
 
-        <!-- Put this script at bottom so it starts after all the HTML is loaded -->
-        <script type="text/javascript">
-            timeToGoElement = document.getElementById('timeToGo');
-            startValue = document.getElementById('startSeconds').innerHTML;
-            startCountDown();
-        </script>
-    </body>
+    <!-- 
+        The end date (number of seconds, formatted date string or 
+        Date object) data would normally be in a EL expression (not shown), 
+        binding the data to a server-side property or function
+    -->
+    <div id="startTime" style="visibility:hidden;">
+            120000
+    </div>
+
+    <!-- Put this script at bottom so it starts after all the HTML is loaded -->
+    <script type="text/javascript">
+        e1 = document.getElementById('startTime');
+        e2 = document.getElementById('timeToGo');
+        startValue = parseInt(e1.innerHTML);
+
+        var counter = new ByteShopJs.util.datetime.CountDownTimer();
+        var endDate = new Date("June 1, 2013 11:13:00");
+        counter.startUsingEndDate(endDate,e2,"MEDIUM");
+
+        // Or, you can pass the number of seconds to the end date
+//            counter.startUsingSecondsToEndDate(20000,e2,"MEDIUM");
+    </script>
+</body>
+
 </html>

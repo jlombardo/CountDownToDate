@@ -20,17 +20,22 @@
  */
 
 // create the root namespace and making sure we're not overwriting it
-var BYTESHOP = BYTESHOP || {};
+var ByteShopJs = ByteShopJs || {};
 
-// create a general purpose namespace method
-// this will allow us to create namespace a bit easier
-BYTESHOP.createNS = function(namespace) {
+/* Create a general purpose namespace method
+ * to allow us to create namespace a bit easier
+ * 
+ * Aknowledgements: thanks to Kenneth Truyers 
+ * (@link http://www.kenneth-truyers.net/about-kenneth-truyers/) for this
+ * sweet function
+ */
+ByteShopJs.createNS = function(namespace) {
     var nsparts = namespace.split(".");
-    var parent = BYTESHOP;
+    var parent = ByteShopJs;
 
     // we want to be able to include or exclude the root namespace 
     // So we strip it if it's in the namespace
-    if (nsparts[0] === "BYTESHOP") {
+    if (nsparts[0] === "ByteShopJs") {
         nsparts = nsparts.slice(1);
     }
 
@@ -52,7 +57,7 @@ BYTESHOP.createNS = function(namespace) {
     return parent;
 };
 
-BYTESHOP.createNS('BYTESHOP.util.time');
+ByteShopJs.createNS('ByteShopJs.util.datetime');
 
 /**
  * CountDownTimer is a class that provides a dynamic count down display
@@ -60,39 +65,57 @@ BYTESHOP.createNS('BYTESHOP.util.time');
  *
  * Example of how to use:
  * 
- * 	@example
- *	var startTimeInSeconds = 20000;
- *	var displayElement = document.getElementById("myDisplayElement");
- *	var displayFormat = 'MEDIUM';
- * 	var myCounter = new net.byteshop.util.time.CountDownTimer();
- *	myCounter.start(startTimeInSeconds,displayElement,displayFormat);
+ *    var startTimeInSeconds = 20000;
+ *    var displayElement = document.getElementById("myDisplayElement");
+ *    var displayFormat = 'MEDIUM';
+ *    var myCounter = new net.byteshop.util.datetime.CountDownTimer();
+ *    myCounter.startUsingSecondsToEndDate(startTimeInSeconds,displayElement,displayFormat);
+ *    
+ *    Note: alternatively you can use the startUsingEndDate() function,
+ *    passing a Date object or formatted date string for the end date param
  *
  * Display format options:
  *
- *	@example
- * 	An example of the MEDIUM (default) display format is: 2d 3h 40m 23s
- *	@example
- * 	An example of the LONG display format is: 
- *                  2 days 3 hours 40 minutes 23 seconds
- *	@example
- * 	An example of the SHORT display format is: 02:03:40:23
+ *    - An example of the MEDIUM (default) display format is: 2d 3h 40m 23s
+ *    - An example of the LONG display format is: 
+ *      2 days 3 hours 40 minutes 23 seconds
+ *    - An example of the SHORT display format is: 02:03:40:23
  */
-BYTESHOP.util.time.CountDownTimer = function() {
-    var timeToGo = "";
-    var startValue = "";
-    var countDownTimer = "";
+ByteShopJs.util.datetime.CountDownTimer = function() {
+    var timeToGo;
+    var startValue;
+    var countDownTimer;
     var format = "MEDIUM";
 
     /**
      * Starts the count down timer. The timer will automatically be
      * stopped when the count down gets to zero.
-     * @param {Date} [endDate] the end date for the counter
-     * @param {Object} [timeToGoElement] the HTML element where the display 
+     * @param {Date} endDate the end date for the counter
+     * @param {Object} timeToGoElement the HTML element where the display 
      * text is set to the innerHTML of this element
+     * @param {String} displayFormat a value of LONG, MEDIUM or SHORT 
+     * indicating the display format style
      */
-    var start = function(endDate, timeToGoElement, displayFormat) {
+    var startUsingEndDate = function(endDate, timeToGoElement, displayFormat) {
         var today = new Date();
         startValue = Math.ceil((endDate - today)/1000)
+        timeToGo = timeToGoElement;
+        format = displayFormat;
+        countDownTimer = window.setInterval(countDown, 1000);
+    };
+
+    /**
+     * Starts the count down timer. The timer will automatically be
+     * stopped when the count down gets to zero.
+     * @param {Number} secondsToEndDate the number of seconds between now
+     * and the end date
+     * @param {Object} timeToGoElement the HTML element where the display 
+     * text is set to the innerHTML of this element
+     * @param {String} displayFormat a value of LONG, MEDIUM or SHORT 
+     * indicating the display format style
+     */
+    var startUsingSecondsToEndDate = function(secondsToEndDate, timeToGoElement, displayFormat) {
+        startValue = secondsToEndDate;
         timeToGo = timeToGoElement;
         format = displayFormat;
         countDownTimer = window.setInterval(countDown, 1000);
@@ -189,6 +212,7 @@ BYTESHOP.util.time.CountDownTimer = function() {
 
     return {
         // Most properties and functions are private, but we'll expose this one.
-        start: start
+        startUsingEndDate: startUsingEndDate,
+        startUsingSecondsToEndDate: startUsingSecondsToEndDate
     };
 };
