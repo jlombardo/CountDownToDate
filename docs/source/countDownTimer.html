@@ -1,4 +1,21 @@
-/*
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
  * CountDownTimer
  * by James G. Lombardo, dba The ByteShop.Net
  * Version 1.00
@@ -30,22 +47,22 @@ var ByteShopJs = ByteShopJs || {};
  * sweet function
  */
 ByteShopJs.createNS = function(namespace) {
-    var nsparts = namespace.split(".");
+    var nsparts = namespace.split(&quot;.&quot;);
     var parent = ByteShopJs;
 
     // we want to be able to include or exclude the root namespace 
     // So we strip it if it's in the namespace
-    if (nsparts[0] === "ByteShopJs") {
+    if (nsparts[0] === &quot;ByteShopJs&quot;) {
         nsparts = nsparts.slice(1);
     }
 
     // loop through the parts and create 
     // a nested namespace if necessary
-    for (var i = 0; i < nsparts.length; i++) {
+    for (var i = 0; i &lt; nsparts.length; i++) {
         var partname = nsparts[i];
         // check if the current parent already has 
         // the namespace declared, if not create it
-        if (typeof parent[partname] === "undefined") {
+        if (typeof parent[partname] === &quot;undefined&quot;) {
             parent[partname] = {};
         }
         // get a reference to the deepest element 
@@ -59,14 +76,14 @@ ByteShopJs.createNS = function(namespace) {
 
 ByteShopJs.createNS('ByteShopJs.util.datetime');
 
-/**
- * CountDownTimer is a class that provides a dynamic count down display
+<span id='ByteShopJs-util-datetime-CountDownTimer'>/**
+</span> * CountDownTimer is a class that provides a dynamic count down display
  * from a starting time to zero.
  *
  * Example of how to use:
  * 
  *      var endDateInSecondsToGo = 20000;
- *      var displayElement = document.getElementById("myDisplayElement");
+ *      var displayElement = document.getElementById(&quot;myDisplayElement&quot;);
  *      var displayFormat = 'MEDIUM';
  *      var myCounter = new ByteShopJs.util.datetime.CountDownTimer();
  *      myCounter.startUsingSecondsToEndDate(endDateInSecondsToGo,displayElement,displayFormat);
@@ -75,7 +92,7 @@ ByteShopJs.createNS('ByteShopJs.util.datetime');
  *      // passing a Date object or formatted date string for the end date param
  * 
  *      var endDate = new Date(2013,7,1,0,0,0,0);
- *      var displayElement = document.getElementById("myDisplayElement");
+ *      var displayElement = document.getElementById(&quot;myDisplayElement&quot;);
  *      var displayFormat = 'SHORT';
  *      var myCounter = new ByteShopJs.util.datetime.CountDownTimer();
  *      myCounter.startUsingEndDate(endDate,displayElement,displayFormat);
@@ -91,10 +108,10 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     var timeToGo;
     var startValue;
     var countDownTimer;
-    var format = "MEDIUM";
+    var format = &quot;MEDIUM&quot;;
 
-    /**
-     * Starts the count down timer. The timer will automatically be
+<span id='ByteShopJs-util-datetime-CountDownTimer-method-startUsingEndDate'>    /**
+</span>     * Starts the count down timer. The timer will automatically be
      * stopped when the count down gets to zero.
      * @param {Date} endDate the end date for the counter
      * @param {Object} timeToGoElement the HTML element where the display 
@@ -110,8 +127,8 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
         countDownTimer = window.setInterval(countDown, 1000);
     };
 
-    /**
-     * Starts the count down timer. The timer will automatically be
+<span id='ByteShopJs-util-datetime-CountDownTimer-method-startUsingSecondsToEndDate'>    /**
+</span>     * Starts the count down timer. The timer will automatically be
      * stopped when the count down gets to zero.
      * @param {Number} secondsToEndDate the number of seconds between now
      * and the end date
@@ -132,11 +149,11 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     };
 
     var countDown = function() {
-        if (startValue > 0) {
+        if (startValue &gt; 0) {
             startValue--;
             timeToGo.innerHTML = formatValue(startValue);
         } else {
-            // if <= 0 the count down has ended
+            // if &lt;= 0 the count down has ended
             timeToGo.innerHTML = formatValue(startValue);
         }
     };
@@ -147,9 +164,9 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
         var HR_SEC = 60 * 60;
         var MIN_SEC = 60;
 
-        if (timeValue <= 0) {
+        if (timeValue &lt;= 0) {
             stop();
-            return "Ended";
+            return &quot;Ended&quot;;
         }
 
         //  get days to go
@@ -169,48 +186,48 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
 
         // now prepare format and return
         switch (format) {
-            case "MEDIUM":
-                fmt = "" + days + "d " + hrs + "h " + mins + "m " + secs + "s";
+            case &quot;MEDIUM&quot;:
+                fmt = &quot;&quot; + days + &quot;d &quot; + hrs + &quot;h &quot; + mins + &quot;m &quot; + secs + &quot;s&quot;;
                 break;
 
-            case "LONG":
+            case &quot;LONG&quot;:
                 if (days == 1) {
-                    days = days + " day ";
+                    days = days + &quot; day &quot;;
                 } else {
-                    days = days + " days ";
+                    days = days + &quot; days &quot;;
                 }
                 if (hrs == 1) {
-                    hrs = hrs + " hour ";
+                    hrs = hrs + &quot; hour &quot;;
                 } else {
-                    hrs = hrs + " hours ";
+                    hrs = hrs + &quot; hours &quot;;
                 }
                 if (days == 1) {
-                    mins = mins + " minute ";
+                    mins = mins + &quot; minute &quot;;
                 } else {
-                    mins = mins + " minutes ";
+                    mins = mins + &quot; minutes &quot;;
                 }
                 if (secs == 1) {
-                    secs = secs + " second";
+                    secs = secs + &quot; second&quot;;
                 } else {
-                    secs = secs + " seconds";
+                    secs = secs + &quot; seconds&quot;;
                 }
-                fmt = "" + days + hrs + mins + secs;
+                fmt = &quot;&quot; + days + hrs + mins + secs;
                 break;
 
-            case "SHORT":
-                if (days < 10)
-                    days = "0" + days;
-                if (hrs < 10)
-                    hrs = "0" + hrs;
-                if (mins < 10)
-                    mins = "0" + mins;
-                if (secs < 10)
-                    secs = "0" + secs;
-                fmt = "" + days + ":" + hrs + ":" + mins + ":" + secs;
+            case &quot;SHORT&quot;:
+                if (days &lt; 10)
+                    days = &quot;0&quot; + days;
+                if (hrs &lt; 10)
+                    hrs = &quot;0&quot; + hrs;
+                if (mins &lt; 10)
+                    mins = &quot;0&quot; + mins;
+                if (secs &lt; 10)
+                    secs = &quot;0&quot; + secs;
+                fmt = &quot;&quot; + days + &quot;:&quot; + hrs + &quot;:&quot; + mins + &quot;:&quot; + secs;
                 break;
 
             default:
-                fmt = "" + days + "d " + hrs + "h " + mins + "m " + secs + "s";
+                fmt = &quot;&quot; + days + &quot;d &quot; + hrs + &quot;h &quot; + mins + &quot;m &quot; + secs + &quot;s&quot;;
         }
 
         return fmt;
@@ -221,4 +238,6 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
         startUsingEndDate: startUsingEndDate,
         startUsingSecondsToEndDate: startUsingSecondsToEndDate
     };
-};
+};</pre>
+</body>
+</html>
