@@ -1,0 +1,56 @@
+/* 
+    Document   : main
+    Created on : May 31, 2013, 11:28:55 AM
+    Author     : James G. Lombardo, jlombardo@wctc.edu
+    Description:
+        Samle stylesheet for the CountDownTimer
+*/
+
+
+.cd-timer-digit {
+    height: 26px;
+    width: 26px;
+    position: relative;
+    left: 4px;
+    float: left;
+    border: none; /* 1px solid red; */
+    margin: 0px;   
+    padding: 6px;
+    background: black;
+    color: white;
+    font-size: 1.5em;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.cd-timer-colon {
+    height: 26px;
+    width: 8px;
+    position: relative;
+    left: 4px;
+    float: left;
+    border: none; /* 1px solid red; */
+    margin: 0px;   
+    padding: 6px;
+    color: black;
+    font-size: 1.5em;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.cd-timer-footer {
+    height: 26px;
+    width: 26px;
+    position: relative;
+    top: 20px;
+    left: -231px;
+    float: left;
+    border: none;
+    margin-left: 22px;   
+    padding: 6px;
+    color: black;
+    font-size: .75em;
+    font-family: sans-serif;
+    font-weight: lighter;
+}
+

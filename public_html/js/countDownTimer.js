@@ -86,6 +86,10 @@ ByteShopJs.createNS('ByteShopJs.util.datetime');
  *    - An example of the LONG display format is: 
  *      2 days 3 hours 40 minutes 23 seconds
  *    - An example of the SHORT display format is: 02:03:40:23
+ *    - The GRAPHIC option is the same as the SHORT option except that it
+ *      puts the digits in colored boxes and adds a footer describing
+ *      those digits. Note you need to use the sample stylesheet (main.css)
+ *      or one of your own
  */
 ByteShopJs.util.datetime.CountDownTimer = function() {
     var timeToGo;
@@ -208,6 +212,30 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
                     secs = "0" + secs;
                 fmt = "" + days + ":" + hrs + ":" + mins + ":" + secs;
                 break;
+                
+            case "GRAPHIC":
+                 if (days < 10)
+                    days = "0" + days;
+                if (hrs < 10)
+                    hrs = "0" + hrs;
+                if (mins < 10)
+                    mins = "0" + mins;
+                if (secs < 10)
+                    secs = "0" + secs;
+                fmt = "<div class='cd-timer-digit'>" + days + "</div>"
+                      + "<div class='cd-timer-colon'>:</div>"
+                      + "<div class='cd-timer-digit'>" + hrs + "</div>"
+                      + "<div class='cd-timer-colon'>:</div>"
+                      + "<div class='cd-timer-digit'>" + mins + "</div>"
+                      + "<div class='cd-timer-colon'>:</div>"
+                      + "<div class='cd-timer-digit'>" + secs + "</div>"
+                      + "<br/>"
+                      + "<div class='cd-timer-footer'>Days</div>"
+                      + "<div class='cd-timer-footer'>Hrs</div>"
+                      + "<div class='cd-timer-footer'>Min</div>"
+                      + "<div class='cd-timer-footer'>Sec</div>";
+               
+                break;           
 
             default:
                 fmt = "" + days + "d " + hrs + "h " + mins + "m " + secs + "s";
