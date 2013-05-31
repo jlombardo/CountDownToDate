@@ -103,6 +103,10 @@ ByteShopJs.createNS('ByteShopJs.util.datetime');
  *    - An example of the LONG display format is: 
  *      2 days 3 hours 40 minutes 23 seconds
  *    - An example of the SHORT display format is: 02:03:40:23
+ *    - The GRAPHIC option is the same as the SHORT option except that it
+ *      puts the digits in colored boxes and adds a footer describing
+ *      those digits. Note you need to use the sample stylesheet (main.css)
+ *      or one of your own
  */
 ByteShopJs.util.datetime.CountDownTimer = function() {
     var timeToGo;
@@ -225,6 +229,30 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
                     secs = &quot;0&quot; + secs;
                 fmt = &quot;&quot; + days + &quot;:&quot; + hrs + &quot;:&quot; + mins + &quot;:&quot; + secs;
                 break;
+                
+            case &quot;GRAPHIC&quot;:
+                 if (days &lt; 10)
+                    days = &quot;0&quot; + days;
+                if (hrs &lt; 10)
+                    hrs = &quot;0&quot; + hrs;
+                if (mins &lt; 10)
+                    mins = &quot;0&quot; + mins;
+                if (secs &lt; 10)
+                    secs = &quot;0&quot; + secs;
+                fmt = &quot;&lt;div class='cd-timer-digit'&gt;&quot; + days + &quot;&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-colon'&gt;:&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-digit'&gt;&quot; + hrs + &quot;&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-colon'&gt;:&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-digit'&gt;&quot; + mins + &quot;&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-colon'&gt;:&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-digit'&gt;&quot; + secs + &quot;&lt;/div&gt;&quot;
+                      + &quot;&lt;br/&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-footer'&gt;Days&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-footer'&gt;Hrs&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-footer'&gt;Min&lt;/div&gt;&quot;
+                      + &quot;&lt;div class='cd-timer-footer'&gt;Sec&lt;/div&gt;&quot;;
+               
+                break;           
 
             default:
                 fmt = &quot;&quot; + days + &quot;d &quot; + hrs + &quot;h &quot; + mins + &quot;m &quot; + secs + &quot;s&quot;;
