@@ -16,12 +16,12 @@
 </head>
 
 <body>
-	
+	<h2>Time to Go to Christmas</h2>
     <!--
         The display element must be identified with the id 'timeToGo'
         to allow the JS function to place the formatted count down data
     -->
-    <div id="timeToGo">TimeToGo</div>
+    <p><div id="timeToGo">TimeToGo</div></p>
 
     <!-- 
         The end date (number of seconds, formatted date string or 
@@ -38,9 +38,9 @@
         e2 = document.getElementById('timeToGo');
         startValue = parseInt(e1.innerHTML);
 
-        var counter = new ByteShopJs.util.datetime.CountDownTimer();
-        var endDate = new Date("June 2, 2013 11:13:00");
-        counter.startUsingEndDate(endDate,e2,"GRAPHIC");
+        var counter = new ByteShopJs.util.datetime.CountDownTimer;
+        var endDate = new Date("December 25, 2013 00:00:00");
+        counter.startUsingEndDate(endDate,e2,"LONG");
 
         // Or, you can pass the number of seconds to the end date
 //            counter.startUsingSecondsToEndDate(20000,e2,"MEDIUM");

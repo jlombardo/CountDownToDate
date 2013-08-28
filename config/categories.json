@@ -1,0 +1,19 @@
+[
+      {
+          "name": "Components",
+          "groups": [
+              {
+                  "name": "Utilities.DateTime",
+                  "classes": [
+                      "ByteShopJs.util.datetime.*"
+                  ]
+              },
+              {
+                  "name": "Utilities.Text",
+                  "classes": [
+                      
+                  ]
+              }
+          ]
+      }
+  ]

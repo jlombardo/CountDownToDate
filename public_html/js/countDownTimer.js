@@ -249,4 +249,11 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
         startUsingEndDate: startUsingEndDate,
         startUsingSecondsToEndDate: startUsingSecondsToEndDate
     };
+    
+    
+    ByteShopJs.createNS('ByteShopJs.util.text');
+
+    ByteShopJs.util.text.Soundex = function() {
+    
+    };
 };
