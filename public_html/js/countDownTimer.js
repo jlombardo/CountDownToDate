@@ -29,7 +29,7 @@ var ByteShopJs = ByteShopJs || {};
  * (@link http://www.kenneth-truyers.net/about-kenneth-truyers/) for this
  * sweet function
  */
-ByteShopJs.createNS = function(namespace) {
+ByteShopJs.createNS = function (namespace) {
     var nsparts = namespace.split(".");
     var parent = ByteShopJs;
 
