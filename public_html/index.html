@@ -16,20 +16,37 @@
 </head>
 
 <body>
-	<h2>Time to Go to Christmas</h2>
-    <!--
-        The display element must be identified with the id 'timeToGo'
-        to allow the JS function to place the formatted count down data
-    -->
-    <p><div id="timeToGo">TimeToGo</div></p>
+    <div id="CountDownTimer">
+    	<h2>Time to Go to Christmas</h2>
+        <!--
+            The display element must be identified with the id 'timeToGo'
+            to allow the JS function to place the formatted count down data
+        -->
+        <div id="timeToGo">
+            <ul>
+                <li id="days"></li>
+                <li id="hours"></li>
+                <li id="mins"></li>
+                <li id="secs"></li>
+            </ul>
+        </div>
+        <div id="timeToGoLabels">
+            <ul>
+                <li>Days</li>
+                <li>Hours</li>
+                <li>Min</li>
+                <li>Sec</li>
+            </ul>
+        </div>
 
-    <!-- 
-        The end date (number of seconds, formatted date string or 
-        Date object) data would normally be in a EL expression (not shown), 
-        binding the data to a server-side property or function
-    -->
-    <div id="startTime" style="visibility:hidden;">
-            120000
+        <!-- 
+            The end date (number of seconds, formatted date string or 
+            Date object) data would normally be in a EL expression (not shown), 
+            binding the data to a server-side property or function
+        -->
+        <div id="startTime" style="visibility:hidden;">
+                120000
+        </div>
     </div>
 
     <!-- Put this script at bottom so it starts after all the HTML is loaded -->

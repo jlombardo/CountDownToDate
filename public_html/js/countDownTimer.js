@@ -138,7 +138,11 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     var countDown = function() {
         if (startValue > 0) {
             startValue--;
-            timeToGo.innerHTML = formatValue(startValue);
+            formatValue(startValue);
+            document.getElementById("days").innerHTML = days;
+            document.getElementById("hours").innerHTML = hrs;
+            document.getElementById("mins").innerHTML = mins;
+            document.getElementById("secs").innerHTML = secs;
         } else {
             // if <= 0 the count down has ended
             timeToGo.innerHTML = formatValue(startValue);
@@ -146,102 +150,30 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     };
 
     var formatValue = function(timeValue) {
-        var fmt, days, hrs, mins, secs;
+        //var fmt, days, hrs, mins, secs;
         var DAY_SEC = 60 * 60 * 24;
         var HR_SEC = 60 * 60;
         var MIN_SEC = 60;
 
         if (timeValue <= 0) {
             stop();
-            return "Ended";
+            //return "Ended";
         }
 
         //  get days to go
-        days = Math.floor(timeValue / DAY_SEC);
-        timeValue -= (days * DAY_SEC);
+        this.days = Math.floor(timeValue / DAY_SEC);
+        timeValue -= (this.days * DAY_SEC);
 
         // get hours to go
-        hrs = Math.floor(timeValue / HR_SEC);
-        timeValue -= (hrs * HR_SEC);
+        this.hrs = Math.floor(timeValue / HR_SEC);
+        timeValue -= (this.hrs * HR_SEC);
 
         // get minutes to go
-        mins = Math.floor(timeValue / MIN_SEC);
-        timeValue -= (mins * MIN_SEC);
+        this.mins = Math.floor(timeValue / MIN_SEC);
+        timeValue -= (this.mins * MIN_SEC);
 
         // get seconds to go
-        secs = timeValue;
-
-        // now prepare format and return
-        switch (format) {
-            case "MEDIUM":
-                fmt = "" + days + "d " + hrs + "h " + mins + "m " + secs + "s";
-                break;
-
-            case "LONG":
-                if (days == 1) {
-                    days = days + " day ";
-                } else {
-                    days = days + " days ";
-                }
-                if (hrs == 1) {
-                    hrs = hrs + " hour ";
-                } else {
-                    hrs = hrs + " hours ";
-                }
-                if (days == 1) {
-                    mins = mins + " minute ";
-                } else {
-                    mins = mins + " minutes ";
-                }
-                if (secs == 1) {
-                    secs = secs + " second";
-                } else {
-                    secs = secs + " seconds";
-                }
-                fmt = "" + days + hrs + mins + secs;
-                break;
-
-            case "SHORT":
-                if (days < 10)
-                    days = "0" + days;
-                if (hrs < 10)
-                    hrs = "0" + hrs;
-                if (mins < 10)
-                    mins = "0" + mins;
-                if (secs < 10)
-                    secs = "0" + secs;
-                fmt = "" + days + ":" + hrs + ":" + mins + ":" + secs;
-                break;
-                
-            case "GRAPHIC":
-                 if (days < 10)
-                    days = "0" + days;
-                if (hrs < 10)
-                    hrs = "0" + hrs;
-                if (mins < 10)
-                    mins = "0" + mins;
-                if (secs < 10)
-                    secs = "0" + secs;
-                fmt = "<div class='cd-timer-digit'>" + days + "</div>"
-                      + "<div class='cd-timer-colon'>:</div>"
-                      + "<div class='cd-timer-digit'>" + hrs + "</div>"
-                      + "<div class='cd-timer-colon'>:</div>"
-                      + "<div class='cd-timer-digit'>" + mins + "</div>"
-                      + "<div class='cd-timer-colon'>:</div>"
-                      + "<div class='cd-timer-digit'>" + secs + "</div>"
-                      + "<br/>"
-                      + "<div class='cd-timer-footer'>Days</div>"
-                      + "<div class='cd-timer-footer'>Hrs</div>"
-                      + "<div class='cd-timer-footer'>Min</div>"
-                      + "<div class='cd-timer-footer'>Sec</div>";
-               
-                break;           
-
-            default:
-                fmt = "" + days + "d " + hrs + "h " + mins + "m " + secs + "s";
-        }
-
-        return fmt;
+        this.secs = timeValue;
     };
 
     return {

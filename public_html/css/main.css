@@ -6,51 +6,61 @@
         Samle stylesheet for the CountDownTimer
 */
 
+#CountDownTimer {
+    display: block;
+    margin: 10px auto;
+}
 
-.cd-timer-digit {
-    height: 26px;
-    width: 26px;
-    position: relative;
-    left: 4px;
-    float: left;
-    border: none; /* 1px solid red; */
-    margin: 0px;   
-    padding: 6px;
-    background: black;
-    color: white;
+#timeToGoHeader {
+    text-align: center;
+}
+
+#CountDownTimer {
+    display: block;
+    text-align: center;
+    width: 275px;
+}
+
+#timeToGo ul {
+    list-style: none outside none;
+}
+
+#timeToGo li {
+    background: none repeat scroll 0 0 #0000FF;
+    border: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    display: inline-block;
+    text-decoration: none;
     font-size: 1.5em;
     font-family: sans-serif;
     font-weight: bold;
+    height: 30px;
+    width: 40px;
+    padding-top: 10px;
+    position: relative;
+    top: -15px;
+    left: -20px;
 }
 
-.cd-timer-colon {
-    height: 26px;
-    width: 8px;
-    position: relative;
-    left: 4px;
-    float: left;
-    border: none; /* 1px solid red; */
-    margin: 0px;   
-    padding: 6px;
-    color: black;
-    font-size: 1.5em;
-    font-family: sans-serif;
-    font-weight: bold;
+#timeToGoLabels ul {
+    list-style: none outside none;
 }
 
-.cd-timer-footer {
-    height: 26px;
-    width: 26px;
-    position: relative;
-    top: 20px;
-    left: -231px;
-    float: left;
-    border: none;
-    margin-left: 22px;   
-    padding: 6px;
-    color: black;
+#timeToGoLabels li {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #FFFFFF;
+    color: #000000;
+    display: inline-block;
+    text-decoration: none;
     font-size: .75em;
-    font-family: sans-serif;
+    font-family: sans-serif;   
     font-weight: lighter;
+    height: 10px;
+    width: 40px;
+    padding-top: 0px;
+    position: relative;
+    top: -27px;
+    left: -20px;
 }
+
 
