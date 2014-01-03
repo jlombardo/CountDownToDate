@@ -3,9 +3,10 @@
     Created on : May 31, 2013, 11:28:55 AM
     Author     : James G. Lombardo, jlombardo@wctc.edu
     Description:
-        Samle stylesheet for the CountDownTimer
+        Sample stylesheet for the CountDownTimer
 */
 
+/* Normally you would position this in your own css */
 #CountDownTimer {
     display: block;
     margin: 10px auto;

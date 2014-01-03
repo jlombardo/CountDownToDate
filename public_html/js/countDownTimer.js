@@ -95,7 +95,7 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     var timeToGo;
     var startValue;
     var countDownTimer;
-    var format = "MEDIUM";
+    var format;
 
     /**
      * Starts the count down timer. The timer will automatically be
@@ -110,7 +110,8 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
         var today = new Date();
         startValue = Math.ceil((endDate - today)/1000)
         timeToGo = timeToGoElement;
-        format = displayFormat;
+        // default if missing
+        if(!displayFormat) format = 'MEDIUM';
         countDownTimer = window.setInterval(countDown, 1000);
     };
 
@@ -127,7 +128,8 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     var startUsingSecondsToEndDate = function(secondsToEndDate, timeToGoElement, displayFormat) {
         startValue = secondsToEndDate;
         timeToGo = timeToGoElement;
-        format = displayFormat;
+        // default if missing
+        if(!displayFormat) format = 'MEDIUM';
         countDownTimer = window.setInterval(countDown, 1000);
     };
 
