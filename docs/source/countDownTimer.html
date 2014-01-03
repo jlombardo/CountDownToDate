@@ -18,7 +18,7 @@
   <pre class="prettyprint lang-js">/*
  * CountDownTimer
  * by James G. Lombardo, dba The ByteShop.Net
- * Version 1.00
+ * Version 1.01
  * 
  * Copyright 2013 by The ByteShop.Net
  * License: MIT License
@@ -46,7 +46,7 @@ var ByteShopJs = ByteShopJs || {};
  * (@link http://www.kenneth-truyers.net/about-kenneth-truyers/) for this
  * sweet function
  */
-ByteShopJs.createNS = function(namespace) {
+ByteShopJs.createNS = function (namespace) {
     var nsparts = namespace.split(&quot;.&quot;);
     var parent = ByteShopJs;
 
@@ -78,7 +78,7 @@ ByteShopJs.createNS('ByteShopJs.util.datetime');
 
 <span id='ByteShopJs-util-datetime-CountDownTimer'>/**
 </span> * CountDownTimer is a class that provides a dynamic count down display
- * from a starting time to zero.
+ * from a starting time or ending date to zero.
  *
  * Example of how to use:
  * 
@@ -97,22 +97,25 @@ ByteShopJs.createNS('ByteShopJs.util.datetime');
  *      var myCounter = new ByteShopJs.util.datetime.CountDownTimer();
  *      myCounter.startUsingEndDate(endDate,displayElement,displayFormat);
  *
- * Display format options:
+ * Display format options: this script will auto-format when choice is SHORT,
+ * MEDIUM or LONG. Choice of NONE provides data only:
  *
  *    - An example of the MEDIUM (default) display format is: 2d 3h 40m 23s
  *    - An example of the LONG display format is: 
  *      2 days 3 hours 40 minutes 23 seconds
  *    - An example of the SHORT display format is: 02:03:40:23
- *    - The GRAPHIC option is the same as the SHORT option except that it
- *      puts the digits in colored boxes and adds a footer describing
+ *    - The NONE option is meant for use by those who want to format the
+ *      time to go data on their own. For example you could put the digit
+ *      values in colored boxes with a footer describing
  *      those digits. Note you need to use the sample stylesheet (main.css)
- *      or one of your own
+ *      or one of your own.
  */
 ByteShopJs.util.datetime.CountDownTimer = function() {
     var timeToGo;
     var startValue;
     var countDownTimer;
-    var format = &quot;MEDIUM&quot;;
+    var format;
+    var fmt, days, hrs, mins, secs;
 
 <span id='ByteShopJs-util-datetime-CountDownTimer-method-startUsingEndDate'>    /**
 </span>     * Starts the count down timer. The timer will automatically be
@@ -120,14 +123,15 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
      * @param {Date} endDate the end date for the counter
      * @param {Object} timeToGoElement the HTML element where the display 
      * text is set to the innerHTML of this element
-     * @param {String} displayFormat a value of LONG, MEDIUM or SHORT 
-     * indicating the display format style
+     * @param {String} displayFormat a value of LONG, MEDIUM, SHORT or NONE
+     * indicating the display format style. Default is MEDIUM.
      */
     var startUsingEndDate = function(endDate, timeToGoElement, displayFormat) {
         var today = new Date();
         startValue = Math.ceil((endDate - today)/1000)
         timeToGo = timeToGoElement;
-        format = displayFormat;
+        // default if missing
+        format = !displayFormat ? &quot;MEDIUM&quot; : displayFormat;
         countDownTimer = window.setInterval(countDown, 1000);
     };
 
@@ -138,13 +142,14 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
      * and the end date
      * @param {Object} timeToGoElement the HTML element where the display 
      * text is set to the innerHTML of this element
-     * @param {String} displayFormat a value of LONG, MEDIUM or SHORT 
-     * indicating the display format style
+     * @param {String} displayFormat a value of LONG, MEDIUM, SHORT or NONE 
+     * indicating the display format style. Default is MEDIUM.
      */
     var startUsingSecondsToEndDate = function(secondsToEndDate, timeToGoElement, displayFormat) {
         startValue = secondsToEndDate;
         timeToGo = timeToGoElement;
-        format = displayFormat;
+        // default if missing
+        format = !displayFormat ? &quot;MEDIUM&quot; : displayFormat;
         countDownTimer = window.setInterval(countDown, 1000);
     };
 
@@ -155,7 +160,15 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     var countDown = function() {
         if (startValue &gt; 0) {
             startValue--;
-            timeToGo.innerHTML = formatValue(startValue);
+            if(format === &quot;NONE&quot;) {
+                formatValue(startValue);
+                document.getElementById(&quot;days&quot;).innerHTML = days;
+                document.getElementById(&quot;hours&quot;).innerHTML = hrs;
+                document.getElementById(&quot;mins&quot;).innerHTML = mins;
+                document.getElementById(&quot;secs&quot;).innerHTML = secs;
+            } else {
+                timeToGo.innerHTML = formatValue(startValue);
+            }
         } else {
             // if &lt;= 0 the count down has ended
             timeToGo.innerHTML = formatValue(startValue);
@@ -163,7 +176,6 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     };
 
     var formatValue = function(timeValue) {
-        var fmt, days, hrs, mins, secs;
         var DAY_SEC = 60 * 60 * 24;
         var HR_SEC = 60 * 60;
         var MIN_SEC = 60;
@@ -190,6 +202,20 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
 
         // now prepare format and return
         switch (format) {
+            // EXAMPLE: 12:22:13:11
+            case &quot;SHORT&quot;:
+                if (days &lt; 10)
+                    days = &quot;0&quot; + days;
+                if (hrs &lt; 10)
+                    hrs = &quot;0&quot; + hrs;
+                if (mins &lt; 10)
+                    mins = &quot;0&quot; + mins;
+                if (secs &lt; 10)
+                    secs = &quot;0&quot; + secs;
+                fmt = &quot;&quot; + days + &quot;:&quot; + hrs + &quot;:&quot; + mins + &quot;:&quot; + secs;
+                break;
+
+            //EXAMPLE: 12d 22h 13m 11s
             case &quot;MEDIUM&quot;:
                 fmt = &quot;&quot; + days + &quot;d &quot; + hrs + &quot;h &quot; + mins + &quot;m &quot; + secs + &quot;s&quot;;
                 break;
@@ -217,44 +243,13 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
                 }
                 fmt = &quot;&quot; + days + hrs + mins + secs;
                 break;
-
-            case &quot;SHORT&quot;:
-                if (days &lt; 10)
-                    days = &quot;0&quot; + days;
-                if (hrs &lt; 10)
-                    hrs = &quot;0&quot; + hrs;
-                if (mins &lt; 10)
-                    mins = &quot;0&quot; + mins;
-                if (secs &lt; 10)
-                    secs = &quot;0&quot; + secs;
-                fmt = &quot;&quot; + days + &quot;:&quot; + hrs + &quot;:&quot; + mins + &quot;:&quot; + secs;
-                break;
                 
-            case &quot;GRAPHIC&quot;:
-                 if (days &lt; 10)
-                    days = &quot;0&quot; + days;
-                if (hrs &lt; 10)
-                    hrs = &quot;0&quot; + hrs;
-                if (mins &lt; 10)
-                    mins = &quot;0&quot; + mins;
-                if (secs &lt; 10)
-                    secs = &quot;0&quot; + secs;
-                fmt = &quot;&lt;div class='cd-timer-digit'&gt;&quot; + days + &quot;&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-colon'&gt;:&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-digit'&gt;&quot; + hrs + &quot;&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-colon'&gt;:&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-digit'&gt;&quot; + mins + &quot;&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-colon'&gt;:&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-digit'&gt;&quot; + secs + &quot;&lt;/div&gt;&quot;
-                      + &quot;&lt;br/&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-footer'&gt;Days&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-footer'&gt;Hrs&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-footer'&gt;Min&lt;/div&gt;&quot;
-                      + &quot;&lt;div class='cd-timer-footer'&gt;Sec&lt;/div&gt;&quot;;
-               
+            case &quot;NONE&quot;:
+                fmt = &quot;&quot;;
                 break;           
 
             default:
+                // SHORT format
                 fmt = &quot;&quot; + days + &quot;d &quot; + hrs + &quot;h &quot; + mins + &quot;m &quot; + secs + &quot;s&quot;;
         }
 
@@ -266,6 +261,7 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
         startUsingEndDate: startUsingEndDate,
         startUsingSecondsToEndDate: startUsingSecondsToEndDate
     };
+    
 };</pre>
 </body>
 </html>

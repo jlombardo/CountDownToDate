@@ -1,7 +1,7 @@
 /*
  * CountDownTimer
  * by James G. Lombardo, dba The ByteShop.Net
- * Version 1.00
+ * Version 1.01
  * 
  * Copyright 2013 by The ByteShop.Net
  * License: MIT License
@@ -61,7 +61,7 @@ ByteShopJs.createNS('ByteShopJs.util.datetime');
 
 /**
  * CountDownTimer is a class that provides a dynamic count down display
- * from a starting time to zero.
+ * from a starting time or ending date to zero.
  *
  * Example of how to use:
  * 
@@ -80,22 +80,25 @@ ByteShopJs.createNS('ByteShopJs.util.datetime');
  *      var myCounter = new ByteShopJs.util.datetime.CountDownTimer();
  *      myCounter.startUsingEndDate(endDate,displayElement,displayFormat);
  *
- * Display format options:
+ * Display format options: this script will auto-format when choice is SHORT,
+ * MEDIUM or LONG. Choice of NONE provides data only:
  *
  *    - An example of the MEDIUM (default) display format is: 2d 3h 40m 23s
  *    - An example of the LONG display format is: 
  *      2 days 3 hours 40 minutes 23 seconds
  *    - An example of the SHORT display format is: 02:03:40:23
- *    - The GRAPHIC option is the same as the SHORT option except that it
- *      puts the digits in colored boxes and adds a footer describing
+ *    - The NONE option is meant for use by those who want to format the
+ *      time to go data on their own. For example you could put the digit
+ *      values in colored boxes with a footer describing
  *      those digits. Note you need to use the sample stylesheet (main.css)
- *      or one of your own
+ *      or one of your own.
  */
 ByteShopJs.util.datetime.CountDownTimer = function() {
     var timeToGo;
     var startValue;
     var countDownTimer;
     var format;
+    var fmt, days, hrs, mins, secs;
 
     /**
      * Starts the count down timer. The timer will automatically be
@@ -103,15 +106,15 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
      * @param {Date} endDate the end date for the counter
      * @param {Object} timeToGoElement the HTML element where the display 
      * text is set to the innerHTML of this element
-     * @param {String} displayFormat a value of LONG, MEDIUM or SHORT 
-     * indicating the display format style
+     * @param {String} displayFormat a value of LONG, MEDIUM, SHORT or NONE
+     * indicating the display format style. Default is MEDIUM.
      */
     var startUsingEndDate = function(endDate, timeToGoElement, displayFormat) {
         var today = new Date();
         startValue = Math.ceil((endDate - today)/1000)
         timeToGo = timeToGoElement;
         // default if missing
-        if(!displayFormat) format = 'MEDIUM';
+        format = !displayFormat ? "MEDIUM" : displayFormat;
         countDownTimer = window.setInterval(countDown, 1000);
     };
 
@@ -122,14 +125,14 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
      * and the end date
      * @param {Object} timeToGoElement the HTML element where the display 
      * text is set to the innerHTML of this element
-     * @param {String} displayFormat a value of LONG, MEDIUM or SHORT 
-     * indicating the display format style
+     * @param {String} displayFormat a value of LONG, MEDIUM, SHORT or NONE 
+     * indicating the display format style. Default is MEDIUM.
      */
     var startUsingSecondsToEndDate = function(secondsToEndDate, timeToGoElement, displayFormat) {
         startValue = secondsToEndDate;
         timeToGo = timeToGoElement;
         // default if missing
-        if(!displayFormat) format = 'MEDIUM';
+        format = !displayFormat ? "MEDIUM" : displayFormat;
         countDownTimer = window.setInterval(countDown, 1000);
     };
 
@@ -140,11 +143,15 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     var countDown = function() {
         if (startValue > 0) {
             startValue--;
-            formatValue(startValue);
-            document.getElementById("days").innerHTML = days;
-            document.getElementById("hours").innerHTML = hrs;
-            document.getElementById("mins").innerHTML = mins;
-            document.getElementById("secs").innerHTML = secs;
+            if(format === "NONE") {
+                formatValue(startValue);
+                document.getElementById("days").innerHTML = days;
+                document.getElementById("hours").innerHTML = hrs;
+                document.getElementById("mins").innerHTML = mins;
+                document.getElementById("secs").innerHTML = secs;
+            } else {
+                timeToGo.innerHTML = formatValue(startValue);
+            }
         } else {
             // if <= 0 the count down has ended
             timeToGo.innerHTML = formatValue(startValue);
@@ -152,30 +159,84 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
     };
 
     var formatValue = function(timeValue) {
-        //var fmt, days, hrs, mins, secs;
         var DAY_SEC = 60 * 60 * 24;
         var HR_SEC = 60 * 60;
         var MIN_SEC = 60;
 
         if (timeValue <= 0) {
             stop();
-            //return "Ended";
+            return "Ended";
         }
 
         //  get days to go
-        this.days = Math.floor(timeValue / DAY_SEC);
-        timeValue -= (this.days * DAY_SEC);
+        days = Math.floor(timeValue / DAY_SEC);
+        timeValue -= (days * DAY_SEC);
 
         // get hours to go
-        this.hrs = Math.floor(timeValue / HR_SEC);
-        timeValue -= (this.hrs * HR_SEC);
+        hrs = Math.floor(timeValue / HR_SEC);
+        timeValue -= (hrs * HR_SEC);
 
         // get minutes to go
-        this.mins = Math.floor(timeValue / MIN_SEC);
-        timeValue -= (this.mins * MIN_SEC);
+        mins = Math.floor(timeValue / MIN_SEC);
+        timeValue -= (mins * MIN_SEC);
 
         // get seconds to go
-        this.secs = timeValue;
+        secs = timeValue;
+
+        // now prepare format and return
+        switch (format) {
+            // EXAMPLE: 12:22:13:11
+            case "SHORT":
+                if (days < 10)
+                    days = "0" + days;
+                if (hrs < 10)
+                    hrs = "0" + hrs;
+                if (mins < 10)
+                    mins = "0" + mins;
+                if (secs < 10)
+                    secs = "0" + secs;
+                fmt = "" + days + ":" + hrs + ":" + mins + ":" + secs;
+                break;
+
+            //EXAMPLE: 12d 22h 13m 11s
+            case "MEDIUM":
+                fmt = "" + days + "d " + hrs + "h " + mins + "m " + secs + "s";
+                break;
+
+            case "LONG":
+                if (days == 1) {
+                    days = days + " day ";
+                } else {
+                    days = days + " days ";
+                }
+                if (hrs == 1) {
+                    hrs = hrs + " hour ";
+                } else {
+                    hrs = hrs + " hours ";
+                }
+                if (days == 1) {
+                    mins = mins + " minute ";
+                } else {
+                    mins = mins + " minutes ";
+                }
+                if (secs == 1) {
+                    secs = secs + " second";
+                } else {
+                    secs = secs + " seconds";
+                }
+                fmt = "" + days + hrs + mins + secs;
+                break;
+                
+            case "NONE":
+                fmt = "";
+                break;           
+
+            default:
+                // SHORT format
+                fmt = "" + days + "d " + hrs + "h " + mins + "m " + secs + "s";
+        }
+
+        return fmt;
     };
 
     return {
@@ -184,10 +245,4 @@ ByteShopJs.util.datetime.CountDownTimer = function() {
         startUsingSecondsToEndDate: startUsingSecondsToEndDate
     };
     
-    
-    ByteShopJs.createNS('ByteShopJs.util.text');
-
-    ByteShopJs.util.text.Soundex = function() {
-    
-    };
 };

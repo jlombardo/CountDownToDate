@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--
+    This is a demo of the ByteShopJs.util.datatime.CountDownTimer that
+    provides a real time, animated count down display to an end date.
+    In this demo, the output is pre-formatted by the script. However, you can
+    still provide some custom style information via your own css.
+
+    Version 1.01
+    Author: James G. Lombardo
+-->
+<html>
+  <head>
+  	<meta charset="utf-8">
+    <title>JavaScript Timer Demo</title>
+    <script type="text/javascript" src="js/countDownTimer.js"></script>
+</head>
+
+<body>
+    <div id="CountDownTimer">
+    	<h2 id="timeToGoHeader">Time to Go to Christmas</h2>
+    </div>
+    <p><div id="timeToGo">xx</div></p>
+
+    <!-- 
+        The startTime is the number of seconds to go to the end date. This
+        is only needed when using the CountDownTimer.startUsingSecondsToEndDate
+        function. The value would normally be provided by some other client-
+        or server-side script. For example, in JavaServer Faces this might be
+        an EL expression.
+    -->
+    <div id="startTime" style="visibility:hidden;">
+            120000
+    </div>
+
+    <!-- Put this script at bottom so it starts after all the HTML is loaded -->
+    <script type="text/javascript">
+        e1 = document.getElementById('startTime');
+        e2 = document.getElementById('timeToGo');
+        startValue = parseInt(e1.innerHTML);
+
+        var counter = new ByteShopJs.util.datetime.CountDownTimer;
+        var endDate = new Date("December 25, 2014 00:00:00");
+        var today = new Date();
+        
+        // DON'T USE THE "NONE" OPTION IN THIS DEMO!! See index.html
+        counter.startUsingSecondsToEndDate(e1.innerHTML,e2,"SHORT");
+        //counter.startUsingEndDate(endDate,e2,"MEDIUM");
+        //counter.startUsingEndDate(endDate,e2,"LONG");
+    </script>
+</body>
+
+</html>
