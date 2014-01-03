@@ -1,6 +1,6 @@
 /*
  * CountDownTimer
- * by James G. Lombardo, dba The ByteShop.Net
+ * by James G. Lombardo, dba The ByteShop.Net, jlombardo@wi.rr.com
  * Version 1.01
  * 
  * Copyright 2013 by The ByteShop.Net
