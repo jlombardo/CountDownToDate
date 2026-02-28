@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<!--
+    QUnit test suite for CountDownTimer V1 and V2.
+    Open this file directly in a browser — no build step required.
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CountDownTimer – QUnit Tests</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.21.0.css">
+</head>
+<body>
+    <div id="qunit"></div>
+
+    <!--
+        QUnit resets this fixture to its original HTML before every test,
+        so elements added or removed inside a test are automatically restored.
+    -->
+    <div id="qunit-fixture">
+        <!-- Required by V1 and V2 NONE-format tests -->
+        <li id="days"></li>
+        <li id="hours"></li>
+        <li id="mins"></li>
+        <li id="secs"></li>
+        <!-- General-purpose display element for V2 formatted-output tests -->
+        <div id="display"></div>
+    </div>
+
+    <!-- Libraries under test -->
+    <script src="js/countDownTimer.js"></script>
+    <script src="js/countDownTimer2.js"></script>
+
+    <!-- QUnit (CDN, no install required) -->
+    <script src="https://code.jquery.com/qunit/qunit-2.21.0.js"></script>
+
+    <script>
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  V1  –  ByteShopJs.util.datetime.CountDownTimer
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    QUnit.module('V1 – API shape', function() {
+
+        QUnit.test('namespace is defined', function(assert) {
+            assert.equal(typeof ByteShopJs.util.datetime.CountDownTimer, 'function',
+                'ByteShopJs.util.datetime.CountDownTimer is a constructor');
+        });
+
+        QUnit.test('instance exposes startUsingEndDate, startUsingSecondsToEndDate, stop', function(assert) {
+            var t = new ByteShopJs.util.datetime.CountDownTimer();
+            assert.equal(typeof t.startUsingEndDate,          'function', 'startUsingEndDate');
+            assert.equal(typeof t.startUsingSecondsToEndDate, 'function', 'startUsingSecondsToEndDate');
+            assert.equal(typeof t.stop,                       'function', 'stop');
+        });
+
+        QUnit.test('stop() before start does not throw', function(assert) {
+            var t = new ByteShopJs.util.datetime.CountDownTimer();
+            assert.ok(function() { t.stop(); }, 'no exception');
+        });
+    });
+
+    // ─── V1 format tests ──────────────────────────────────────────────────────
+    // setInterval is intercepted so we can fire the tick callback synchronously
+    // without waiting a real second.
+    QUnit.module('V1 – format output', function(hooks) {
+        var _setInterval, _clearInterval, tick;
+
+        hooks.beforeEach(function() {
+            _setInterval  = window.setInterval;
+            _clearInterval = window.clearInterval;
+            window.setInterval  = function(cb) { tick = cb; return 0; };
+            window.clearInterval = function() {};
+        });
+
+        hooks.afterEach(function() {
+            window.setInterval  = _setInterval;
+            window.clearInterval = _clearInterval;
+        });
+
+        QUnit.test('SHORT – 3661 s → "00:01:01:01"', function(assert) {
+            // 3661 s = 0d 1h 1m 1s
+            var el = document.createElement('div');
+            var t  = new ByteShopJs.util.datetime.CountDownTimer();
+            t.startUsingSecondsToEndDate(3661, el, 'SHORT');
+            tick();
+            assert.equal(el.innerHTML, '00:01:01:01');
+        });
+
+        QUnit.test('MEDIUM – 3661 s → "0d 1h 1m 1s"', function(assert) {
+            var el = document.createElement('div');
+            var t  = new ByteShopJs.util.datetime.CountDownTimer();
+            t.startUsingSecondsToEndDate(3661, el, 'MEDIUM');
+            tick();
+            assert.equal(el.innerHTML, '0d 1h 1m 1s');
+        });
+
+        QUnit.test('MEDIUM – default when no format supplied', function(assert) {
+            var el = document.createElement('div');
+            var t  = new ByteShopJs.util.datetime.CountDownTimer();
+            t.startUsingSecondsToEndDate(3661, el);
+            tick();
+            assert.equal(el.innerHTML, '0d 1h 1m 1s');
+        });
+
+        QUnit.test('LONG – singular (90061 s → "1 day 1 hour 1 minute 1 second")', function(assert) {
+            // 90061 s = 1d 1h 1m 1s
+            var el = document.createElement('div');
+            var t  = new ByteShopJs.util.datetime.CountDownTimer();
+            t.startUsingSecondsToEndDate(90061, el, 'LONG');
+            tick();
+            assert.equal(el.innerHTML, '1 day 1 hour 1 minute 1 second');
+        });
+
+        QUnit.test('LONG – plural (180122 s → "2 days 2 hours 2 minutes 2 seconds")', function(assert) {
+            // 180122 s = 2d 2h 2m 2s
+            var el = document.createElement('div');
+            var t  = new ByteShopJs.util.datetime.CountDownTimer();
+            t.startUsingSecondsToEndDate(180122, el, 'LONG');
+            tick();
+            assert.equal(el.innerHTML, '2 days 2 hours 2 minutes 2 seconds');
+        });
+
+        QUnit.test('NONE – updates individual DOM elements', function(assert) {
+            // 3661 s = 0d 1h 1m 1s
+            var t = new ByteShopJs.util.datetime.CountDownTimer();
+            t.startUsingSecondsToEndDate(3661, null, 'NONE');
+            tick();
+            assert.equal(document.getElementById('days').innerHTML,  '0', 'days');
+            assert.equal(document.getElementById('hours').innerHTML, '1', 'hours');
+            assert.equal(document.getElementById('mins').innerHTML,  '1', 'mins');
+            assert.equal(document.getElementById('secs').innerHTML,  '1', 'secs');
+        });
+
+        QUnit.test('expired timer shows "Ended"', function(assert) {
+            var el = document.createElement('div');
+            var t  = new ByteShopJs.util.datetime.CountDownTimer();
+            t.startUsingSecondsToEndDate(0, el, 'MEDIUM');
+            tick();
+            assert.equal(el.innerHTML, 'Ended');
+        });
+    });
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  V2  –  CountDownTimer (ES6 class)
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    QUnit.module('V2 – calculateTimeParts (static)', function() {
+
+        QUnit.test('0 seconds', function(assert) {
+            assert.deepEqual(CountDownTimer.calculateTimeParts(0),
+                { days: 0, hours: 0, minutes: 0, seconds: 0 });
+        });
+
+        QUnit.test('1 second', function(assert) {
+            assert.deepEqual(CountDownTimer.calculateTimeParts(1),
+                { days: 0, hours: 0, minutes: 0, seconds: 1 });
+        });
+
+        QUnit.test('60 seconds → 1 minute', function(assert) {
+            assert.deepEqual(CountDownTimer.calculateTimeParts(60),
+                { days: 0, hours: 0, minutes: 1, seconds: 0 });
+        });
+
+        QUnit.test('3600 seconds → 1 hour', function(assert) {
+            assert.deepEqual(CountDownTimer.calculateTimeParts(3600),
+                { days: 0, hours: 1, minutes: 0, seconds: 0 });
+        });
+
+        QUnit.test('86400 seconds → 1 day', function(assert) {
+            assert.deepEqual(CountDownTimer.calculateTimeParts(86400),
+                { days: 1, hours: 0, minutes: 0, seconds: 0 });
+        });
+
+        QUnit.test('90061 seconds → 1d 1h 1m 1s', function(assert) {
+            assert.deepEqual(CountDownTimer.calculateTimeParts(90061),
+                { days: 1, hours: 1, minutes: 1, seconds: 1 });
+        });
+
+        QUnit.test('2d 3h 40m 23s', function(assert) {
+            var s = (2 * 86400) + (3 * 3600) + (40 * 60) + 23;
+            assert.deepEqual(CountDownTimer.calculateTimeParts(s),
+                { days: 2, hours: 3, minutes: 40, seconds: 23 });
+        });
+    });
+
+    QUnit.module('V2 – formatTime (static)', function() {
+
+        var multi  = { days: 2, hours: 3, minutes: 40, seconds: 23 };
+        var single = { days: 1, hours: 1, minutes:  1, seconds:  1 };
+        var zeros  = { days: 0, hours: 0, minutes:  0, seconds:  0 };
+
+        QUnit.test('SHORT – leading zeros', function(assert) {
+            assert.equal(CountDownTimer.formatTime(multi, 'SHORT'), '02:03:40:23');
+        });
+
+        QUnit.test('SHORT – all zeros', function(assert) {
+            assert.equal(CountDownTimer.formatTime(zeros, 'SHORT'), '00:00:00:00');
+        });
+
+        QUnit.test('MEDIUM', function(assert) {
+            assert.equal(CountDownTimer.formatTime(multi, 'MEDIUM'), '2d 3h 40m 23s');
+        });
+
+        QUnit.test('LONG – plural forms', function(assert) {
+            assert.equal(CountDownTimer.formatTime(multi, 'LONG'),
+                '2 days 3 hours 40 minutes 23 seconds');
+        });
+
+        QUnit.test('LONG – singular forms', function(assert) {
+            assert.equal(CountDownTimer.formatTime(single, 'LONG'),
+                '1 day 1 hour 1 minute 1 second');
+        });
+
+        QUnit.test('LONG – zero values use plural', function(assert) {
+            assert.equal(CountDownTimer.formatTime(zeros, 'LONG'),
+                '0 days 0 hours 0 minutes 0 seconds');
+        });
+
+        QUnit.test('unknown format falls back to MEDIUM', function(assert) {
+            assert.equal(CountDownTimer.formatTime(multi, 'INVALID'), '2d 3h 40m 23s');
+        });
+    });
+
+    QUnit.module('V2 – constructor validation', function() {
+
+        QUnit.test('throws without endDate or secondsToEnd', function(assert) {
+            assert.throws(
+                function() { new CountDownTimer({ element: document.createElement('div') }); },
+                /endDate or secondsToEnd/
+            );
+        });
+
+        QUnit.test('throws when element is missing for formatted output', function(assert) {
+            assert.throws(
+                function() { new CountDownTimer({ secondsToEnd: 100 }); },
+                /Element is required/
+            );
+        });
+
+        QUnit.test('throws when NONE format DOM elements are absent', function(assert) {
+            // Remove the fixture element; QUnit restores the fixture before the next test.
+            document.getElementById('days').remove();
+            assert.throws(
+                function() { new CountDownTimer({ secondsToEnd: 100, format: 'NONE' }); },
+                /NONE format requires/
+            );
+        });
+
+        QUnit.test('constructs with secondsToEnd + element', function(assert) {
+            var t = new CountDownTimer({
+                secondsToEnd: 3600,
+                element: document.getElementById('display')
+            });
+            assert.ok(t instanceof CountDownTimer);
+        });
+
+        QUnit.test('constructs with endDate + element', function(assert) {
+            var t = new CountDownTimer({
+                endDate: new Date(Date.now() + 3600000),
+                element: document.getElementById('display')
+            });
+            assert.ok(t instanceof CountDownTimer);
+        });
+
+        QUnit.test('constructs with NONE format using fixture elements', function(assert) {
+            var t = new CountDownTimer({ secondsToEnd: 3600, format: 'NONE' });
+            assert.ok(t instanceof CountDownTimer);
+        });
+    });
+    </script>
+</body>
+</html>
