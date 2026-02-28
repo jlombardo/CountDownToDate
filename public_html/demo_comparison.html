@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+    Side-by-side comparison of CountDownTimer V1 vs V2
+    Shows the differences between the original and improved versions
+-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CountDownTimer V1 vs V2 Comparison</title>
+    <script type="text/javascript" src="js/countDownTimer.js"></script>
+    <script type="text/javascript" src="js/countDownTimer2.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .comparison-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .version-column {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+        .v1-column {
+            border-color: #ff6b6b;
+            background-color: #ffe0e0;
+        }
+        .v2-column {
+            border-color: #4ecdc4;
+            background-color: #e0f8f7;
+        }
+        .timer-display {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            min-height: 30px;
+        }
+        .v1-timer { color: #ff6b6b; }
+        .v2-timer { color: #4ecdc4; }
+        .controls {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .controls button {
+            margin: 3px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .v1-button {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        .v2-button {
+            background-color: #4ecdc4;
+            color: white;
+        }
+        .features-list {
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .features-list li {
+            margin: 5px 0;
+        }
+        .pro { color: #4ecdc4; }
+        .con { color: #ff6b6b; }
+        .status {
+            font-size: 12px;
+            text-align: center;
+            font-style: italic;
+            margin: 10px 0;
+            min-height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CountDownTimer: Version 1 vs Version 2 Comparison</h1>
+
+    <div class="comparison-container">
+        <div class="version-column v1-column">
+            <h2>Version 1 (Original)</h2>
+            <ul class="features-list">
+                <li class="con">❌ ES5 syntax (var, function)</li>
+                <li class="con">❌ Hard-coded DOM IDs</li>
+                <li class="con">❌ No pause/resume</li>
+                <li class="con">❌ Limited error handling</li>
+                <li class="con">❌ Bug in LONG format</li>
+                <li class="pro">✅ Works in older browsers</li>
+                <li class="pro">✅ Namespace pattern</li>
+            </ul>
+
+            <h3>30-Second Demo (MEDIUM)</h3>
+            <div id="v1-timer1" class="timer-display v1-timer">Loading...</div>
+            <div id="v1-status1" class="status">Initializing...</div>
+
+            <h3>Short Format Demo</h3>
+            <div id="v1-timer2" class="timer-display v1-timer">Loading...</div>
+            <div id="v1-status2" class="status">Initializing...</div>
+        </div>
+
+        <div class="version-column v2-column">
+            <h2>Version 2 (Improved)</h2>
+            <ul class="features-list">
+                <li class="pro">✅ Modern ES6+ syntax</li>
+                <li class="pro">✅ Flexible DOM targeting</li>
+                <li class="pro">✅ Pause/resume functionality</li>
+                <li class="pro">✅ Better error handling</li>
+                <li class="pro">✅ Callback support</li>
+                <li class="pro">✅ Fixed LONG format bug</li>
+                <li class="pro">✅ Configuration object</li>
+            </ul>
+
+            <h3>30-Second Demo (MEDIUM)</h3>
+            <div id="v2-timer1" class="timer-display v2-timer">Loading...</div>
+            <div class="controls">
+                <button class="v2-button" onclick="pauseV2Timer1()">Pause</button>
+                <button class="v2-button" onclick="resumeV2Timer1()">Resume</button>
+                <button class="v2-button" onclick="resetV2Timer1()">Reset</button>
+            </div>
+            <div id="v2-status1" class="status">Initializing...</div>
+
+            <h3>Short Format Demo</h3>
+            <div id="v2-timer2" class="timer-display v2-timer">Loading...</div>
+            <div id="v2-status2" class="status">Initializing...</div>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
+        <h2>Key Improvements in Version 2:</h2>
+        <ol>
+            <li><strong>Modern JavaScript:</strong> Uses ES6+ classes, arrow functions, template literals</li>
+            <li><strong>Better API:</strong> Configuration object pattern instead of multiple parameters</li>
+            <li><strong>Enhanced Control:</strong> Pause, resume, and stop functionality</li>
+            <li><strong>Callbacks:</strong> onTick and onComplete event handlers</li>
+            <li><strong>Error Handling:</strong> Proper validation and error messages</li>
+            <li><strong>Bug Fixes:</strong> Fixed the LONG format minutes pluralization bug</li>
+            <li><strong>Flexibility:</strong> No hard-coded DOM element IDs</li>
+        </ol>
+    </div>
+
+    <script type="text/javascript">
+        // Version 1 Implementation
+        console.log("Starting V1 timers...");
+        
+        // V1 Timer 1 - 30 seconds MEDIUM format
+        try {
+            const v1Counter1 = new ByteShopJs.util.datetime.CountDownTimer();
+            const v1Element1 = document.getElementById("v1-timer1");
+            v1Counter1.startUsingSecondsToEndDate(30, v1Element1, "MEDIUM");
+            document.getElementById("v1-status1").innerHTML = "Running (V1)";
+        } catch (error) {
+            document.getElementById("v1-timer1").innerHTML = "Error: " + error.message;
+            document.getElementById("v1-status1").innerHTML = "Error";
+        }
+
+        // V1 Timer 2 - 60 seconds SHORT format
+        try {
+            const v1Counter2 = new ByteShopJs.util.datetime.CountDownTimer();
+            const v1Element2 = document.getElementById("v1-timer2");
+            v1Counter2.startUsingSecondsToEndDate(60, v1Element2, "SHORT");
+            document.getElementById("v1-status2").innerHTML = "Running (V1)";
+        } catch (error) {
+            document.getElementById("v1-timer2").innerHTML = "Error: " + error.message;
+            document.getElementById("v1-status2").innerHTML = "Error";
+        }
+
+        // Version 2 Implementation
+        console.log("Starting V2 timers...");
+        
+        let v2Timer1, v2Timer2;
+
+        // V2 Timer 1 - 30 seconds MEDIUM format with controls
+        function startV2Timer1() {
+            try {
+                if (v2Timer1) v2Timer1.stop();
+                v2Timer1 = new CountDownTimer({
+                    secondsToEnd: 30,
+                    element: document.getElementById("v2-timer1"),
+                    format: "MEDIUM",
+                    onComplete: () => {
+                        document.getElementById("v2-status1").innerHTML = "Completed! (V2)";
+                    }
+                });
+                v2Timer1.start();
+                document.getElementById("v2-status1").innerHTML = "Running (V2)";
+            } catch (error) {
+                document.getElementById("v2-timer1").innerHTML = "Error: " + error.message;
+                document.getElementById("v2-status1").innerHTML = "Error";
+            }
+        }
+
+        // V2 Timer 2 - 60 seconds SHORT format
+        try {
+            v2Timer2 = new CountDownTimer({
+                secondsToEnd: 60,
+                element: document.getElementById("v2-timer2"),
+                format: "SHORT",
+                onTick: (timeParts) => {
+                    // Update status every 10 seconds
+                    if (timeParts.seconds % 10 === 0) {
+                        document.getElementById("v2-status2").innerHTML = 
+                            `Running (V2) - ${timeParts.minutes}:${timeParts.seconds.toString().padStart(2, '0')} remaining`;
+                    }
+                },
+                onComplete: () => {
+                    document.getElementById("v2-status2").innerHTML = "Completed! (V2)";
+                }
+            });
+            v2Timer2.start();
+            document.getElementById("v2-status2").innerHTML = "Running (V2)";
+        } catch (error) {
+            document.getElementById("v2-timer2").innerHTML = "Error: " + error.message;
+            document.getElementById("v2-status2").innerHTML = "Error";
+        }
+
+        // Start V2 Timer 1
+        startV2Timer1();
+
+        // Control functions for V2 Timer 1
+        function pauseV2Timer1() {
+            if (v2Timer1) {
+                v2Timer1.pause();
+                document.getElementById("v2-status1").innerHTML = "Paused (V2)";
+            }
+        }
+
+        function resumeV2Timer1() {
+            if (v2Timer1) {
+                v2Timer1.resume();
+                document.getElementById("v2-status1").innerHTML = "Resumed (V2)";
+            }
+        }
+
+        function resetV2Timer1() {
+            startV2Timer1();
+        }
+
+        console.log("=== Comparison Demo Loaded ===");
+        console.log("V1: Traditional approach with namespace pattern");
+        console.log("V2: Modern approach with ES6+ classes and improved features");
+    </script>
+</body>
+</html>

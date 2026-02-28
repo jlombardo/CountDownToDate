@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!--
+    Demo for the improved CountDownTimer (Version 2.0)
+    Uses modern JavaScript ES6+ features and improved API
+    Author: Updated version with modern practices
+-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CountDownTimer V2 Demo - Modern JavaScript</title>
+    <script type="text/javascript" src="js/countDownTimer2.js"></script>
+    <link rel="StyleSheet" type="text/css" href="css/main.css" media="screen">
+    <style>
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #0066cc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .timer-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0066cc;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+        }
+        .controls {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .controls button {
+            margin: 5px;
+            padding: 8px 16px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background-color: #0052a3;
+        }
+        .status {
+            text-align: center;
+            margin: 10px 0;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CountDownTimer Version 2.0 Demo</h1>
+    <p><strong>Features:</strong> Modern ES6+ syntax, better error handling, pause/resume, callbacks</p>
+
+    <div class="demo-section">
+        <h2>1. Countdown to New Year 2026 (MEDIUM format)</h2>
+        <div id="timer1" class="timer-display">Loading...</div>
+        <div class="controls">
+            <button onclick="pauseTimer1()">Pause</button>
+            <button onclick="resumeTimer1()">Resume</button>
+            <button onclick="stopTimer1()">Stop</button>
+        </div>
+        <div id="status1" class="status">Timer running...</div>
+    </div>
+
+    <div class="demo-section">
+        <h2>2. Countdown with Callbacks (SHORT format)</h2>
+        <div id="timer2" class="timer-display">Loading...</div>
+        <div id="status2" class="status">Timer running...</div>
+        <div style="margin-top: 10px;">
+            <small>This timer shows callbacks in action - check the console for tick events!</small>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>3. 5-Minute Timer (LONG format)</h2>
+        <div id="timer3" class="timer-display">Loading...</div>
+        <div class="controls">
+            <button onclick="pauseTimer3()">Pause</button>
+            <button onclick="resumeTimer3()">Resume</button>
+            <button onclick="resetTimer3()">Reset</button>
+        </div>
+        <div id="status3" class="status">Timer running...</div>
+    </div>
+
+    <script type="text/javascript">
+        // Demo 1: Basic countdown to New Year 2026
+        let countdownTimer1;
+        try {
+            countdownTimer1 = new CountDownTimer({
+                endDate: new Date("January 1, 2026 00:00:00"),
+                element: document.getElementById("timer1"),
+                format: "MEDIUM"
+            });
+            countdownTimer1.start();
+        } catch (error) {
+            document.getElementById("timer1").innerHTML = "Error: " + error.message;
+        }
+
+        // Demo 2: Countdown with callbacks
+        let countdownTimer2;
+        try {
+            countdownTimer2 = new CountDownTimer({
+                secondsToEnd: 3600, // 1 hour
+                element: document.getElementById("timer2"),
+                format: "SHORT",
+                onTick: (timeParts) => {
+                    // Log every 30 seconds
+                    if (timeParts.seconds % 30 === 0) {
+                        console.log("Timer 2 tick:", timeParts);
+                    }
+                },
+                onComplete: () => {
+                    document.getElementById("status2").innerHTML = "Timer completed!";
+                    alert("Timer 2 has finished!");
+                }
+            });
+            countdownTimer2.start();
+        } catch (error) {
+            document.getElementById("timer2").innerHTML = "Error: " + error.message;
+        }
+
+        // Demo 3: 5-minute timer with reset functionality
+        let countdownTimer3;
+        const initialSeconds3 = 300; // 5 minutes
+
+        function startTimer3() {
+            try {
+                countdownTimer3 = new CountDownTimer({
+                    secondsToEnd: initialSeconds3,
+                    element: document.getElementById("timer3"),
+                    format: "LONG",
+                    onComplete: () => {
+                        document.getElementById("status3").innerHTML = "5-minute timer completed!";
+                    }
+                });
+                countdownTimer3.start();
+                document.getElementById("status3").innerHTML = "Timer running...";
+            } catch (error) {
+                document.getElementById("timer3").innerHTML = "Error: " + error.message;
+            }
+        }
+
+        // Start timer 3 initially
+        startTimer3();
+
+        // Control functions for Timer 1
+        function pauseTimer1() {
+            if (countdownTimer1) {
+                countdownTimer1.pause();
+                document.getElementById("status1").innerHTML = "Timer paused";
+            }
+        }
+
+        function resumeTimer1() {
+            if (countdownTimer1) {
+                countdownTimer1.resume();
+                document.getElementById("status1").innerHTML = "Timer resumed";
+            }
+        }
+
+        function stopTimer1() {
+            if (countdownTimer1) {
+                countdownTimer1.stop();
+                document.getElementById("status1").innerHTML = "Timer stopped";
+                document.getElementById("timer1").innerHTML = "Stopped";
+            }
+        }
+
+        // Control functions for Timer 3
+        function pauseTimer3() {
+            if (countdownTimer3) {
+                countdownTimer3.pause();
+                document.getElementById("status3").innerHTML = "Timer paused";
+            }
+        }
+
+        function resumeTimer3() {
+            if (countdownTimer3) {
+                countdownTimer3.resume();
+                document.getElementById("status3").innerHTML = "Timer resumed";
+            }
+        }
+
+        function resetTimer3() {
+            if (countdownTimer3) {
+                countdownTimer3.stop();
+            }
+            startTimer3();
+        }
+
+        // Error handling demonstration
+        console.log("=== CountDownTimer V2 Demo Loaded Successfully ===");
+        console.log("Check the console for timer tick events from Timer 2!");
+    </script>
+</body>
+</html>
